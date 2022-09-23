@@ -7,6 +7,7 @@ import {GLTFLoader} from "three/examples/jsm/loaders/GLTFLoader"
 const sizes = {}
 sizes.width = window.innerWidth
 sizes.height = window.innerHeight
+console.log("Changes in git");
 
 window.addEventListener('resize', () =>
 {
