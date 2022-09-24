@@ -32,15 +32,6 @@ camera.position.z = 3
 scene.add(camera)
 
 
-// const plane = new THREE.Mesh(new THREE.PlaneGeometry(10,10,10,10), new THREE.MeshPhongMaterial({color: 'red'}))
-// scene.add(plane);
-// plane.rotation.y = -90
-// plane.rotation.set(-Math.PI/2,0,0);
-// plane.position.y = 0;
-// plane.receiveShadow = true;
-
-
-
 function makePlane(color, xpos, ypos, zpos, xrot, yrot,zrot, hasShadow,scene)
 {
 const plane = new THREE.Mesh(new THREE.PlaneGeometry(10,10,10,10), new THREE.MeshBasicMaterial({color: color, side: THREE.DoubleSide}));
@@ -52,35 +43,46 @@ scene.add(plane);
 return plane;
 }
 const ground = makePlane('grey',0,0,0, -Math.PI/2,0,0,true,scene);
-// console.log(ground.receiveShadow);
 const wall1 = makePlane('green',5,5,0,0,-Math.PI/2,0,true,scene);
 const wall2 = makePlane('orange',-5,5,0,0,-Math.PI/2,0,true,scene);
 const wall3 = makePlane('white',0,5,-5,0,0,0,true,scene);
 const roof = makePlane('grey',0,10,0, -Math.PI/2,0,0,true,scene);
 
 
-
+var refCar;
 const loader = new GLTFLoader().setPath("models/");
-loader.load('CarModel.glb' , function OnLoad(gltf){
+loader.load('CarModel.glb' , function OnLoad(car){
 console.log("adding");
-gltf.scene.scale.set(0.1,0.1,0.1);
-gltf.scene.position.set(0,0,0);
-gltf.castShadow = true;
-scene.add(gltf.scene);
+car.scene.scale.set(0.1,0.1,0.1);
+car.scene.position.set(0,0,0);
+car.castShadow = true;
+refCar = car.scene;
+console.log(refCar)
+scene.add(car.scene);
+// return gltf;
 });
+//console.log(refCar)
 
-loader.load('table.glb' , function OnLoad(gltf){
-    console.log("adding");
-    // gltf.scene.scale.set(0.1,0.1,0.1);
+
+// loader.load('table.glb' , function OnLoad(gltf){
+//     console.log("adding");
+//     // gltf.scene.scale.set(0.1,0.1,0.1);
+//     gltf.scene.position.set(0,0,4);
+//     gltf.scene.rotation.set(0,Math.PI/2,0);
+//     gltf.castShadow = true;
+//     scene.add(gltf.scene);
+//     });
+
+var table;
+loader.load('table.glb', function(gltf){
+
+    scene.add(gltf.scene);
+   // gltf.scene.scale.set(0.1,0.1,0.1);
     gltf.scene.position.set(0,0,4);
+    table = gltf.scene;
     gltf.scene.rotation.set(0,Math.PI/2,0);
     gltf.castShadow = true;
-    scene.add(gltf.scene);
-    });
-
-// const cube = new THREE.Mesh(new THREE.BoxGeometry(1, 1, 1), new THREE.MeshPhongMaterial({color : 'blue', flatShading: true}))
-// scene.add(cube);
-// cube.castShadow = true;
+})
 
 
 const lightColor = 0xFFFFFF;
@@ -101,8 +103,17 @@ renderer.shadowMap.enabled = true;
 const controls = new OrbitControls(camera, renderer.domElement);
 
 
+
 const animate = () =>
 {
+    if(refCar)
+    {
+        refCar.rotation.y +=0.01;
+    }
+    if(table)
+    {
+      //  table.rotation.y += 0.1;
+    }
     // Update
     controls.update();
     // cube.rotation.y += 0.01

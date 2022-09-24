@@ -33,6 +33,10 @@ const geometry = new THREE.BoxGeometry(boxWidth, boxHeight, boxDepth);
 // const cube2 = new THREE.Mesh(geometry,material1);
 // const cube3 = new THREE.Mesh(geometry,material3);
 
+// const cube = new THREE.Mesh(new THREE.BoxGeometry(1, 1, 1), new THREE.MeshPhongMaterial({color : 'blue', flatShading: true}))
+// scene.add(cube);
+// cube.castShadow = true;
+
 
 
 
