@@ -3,6 +3,11 @@ import * as THREE from 'three'
 // import { FlatShading } from 'three'
 import {OrbitControls} from "three/examples/jsm/controls/OrbitControls.js"
 import {GLTFLoader} from "three/examples/jsm/loaders/GLTFLoader"
+import { Vector3 } from 'three'
+import * as dat from "dat.gui"
+
+
+const gui = new dat.GUI();
 
 const sizes = {}
 sizes.width = window.innerWidth
@@ -49,6 +54,39 @@ const wall3 = makePlane('white',0,5,-5,0,0,0,true,scene);
 const roof = makePlane('grey',0,10,0, -Math.PI/2,0,0,true,scene);
 
 
+
+var posFolder = gui.addFolder('Positions');
+posFolder.add(ground.position, "x").min(-10).max(10).step(.001).name("X Position");
+posFolder.add(ground.position, "y").min(-10).max(10).step(.001).name("Y Position");
+posFolder.add(ground.position, "z").min(-10).max(10).step(.001).name("Z Position");
+
+var rotFolder = gui.addFolder('Rotations');
+rotFolder.add(ground.rotation,"x").min(-Math.PI/2).max(Math.PI * 2).step(0.01).name("X Rotation");
+rotFolder.add(ground.rotation,"y").min(-Math.PI/2).max(Math.PI * 2).step(0.01).name("Y Rotation");
+rotFolder.add(ground.rotation,"z").min(-Math.PI/2).max(Math.PI * 2).step(0.01).name("Z Rotation");
+
+var scaleFolder = gui.addFolder("Scale");
+scaleFolder.add(ground.scale, "x").min(0).max(10).step(.001).name("X Scale");
+scaleFolder.add(ground.scale, "y").min(0).max(10).step(.001).name("Y Scale");
+scaleFolder.add(ground.scale, "z").min(0).max(10).step(.001).name("Z Scale");
+
+
+var matFolder = gui.addFolder('Material');
+const parameters = {
+    color: 0xff0000,
+    };
+matFolder.addColor(parameters, "color").onChange(() => {
+    ground.material.color.set(parameters.color);
+    });
+matFolder.add(ground, "visible");
+matFolder.add(ground.material, "wireframe");
+matFolder.add(ground.material,"transparent");
+matFolder.add(ground.material, "opacity").min(0).max(1).step(0.001).name("Aplha");
+
+
+
+
+
 var refCar;
 const loader = new GLTFLoader().setPath("models/");
 loader.load('CarModel.glb' , function OnLoad(car){
@@ -84,6 +122,19 @@ loader.load('table.glb', function(gltf){
     gltf.castShadow = true;
 })
 
+const axesHelper = new THREE.AxesHelper(10);
+scene.add(axesHelper);
+
+const arrowHelper = new THREE.ArrowHelper(new Vector3(1,0,0), ground.position,3,'yellow')
+scene.add(arrowHelper)
+
+const pointLight = new THREE.PointLight(0xFF0000,10,1);
+pointLight.position.set(0,2,0);
+scene.add(pointLight)
+
+const sphereSize = 1
+const pointLightHelper = new THREE.PointLightHelper(pointLight,sphereSize);
+scene.add(pointLightHelper);
 
 const lightColor = 0xFFFFFF;
 const intensity = 1;
