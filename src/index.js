@@ -13,7 +13,6 @@ const sizes = {}
 sizes.width = window.innerWidth
 sizes.height = window.innerHeight
 console.log("Changes in git");
-
 window.addEventListener('resize', () =>
 {
     // Save sizes
